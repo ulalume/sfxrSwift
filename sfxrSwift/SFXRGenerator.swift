@@ -28,24 +28,22 @@ import Foundation
 import AudioToolbox
 import AVFoundation
 
-enum WaveType: Int, RawRepresentable {
+enum WaveType: Int, RawRepresentable, CaseIterable {
   case square = 0
-  case sawtooth = 1
-  case sine = 2
-  case noise = 3
+  case sawtooth
+  case sine
+  case noise
 }
-let maxWaveTypeRawValue = WaveType.noise.rawValue
 
-enum GeneratorType: Int {
+enum GeneratorType: Int, CaseIterable {
   case pickupCoin = 0
-  case laserShoot = 1
-  case explosion = 2
-  case powerup = 3
-  case hitHurt = 4
-  case jump = 5
-  case blipSelect = 6
+  case laserShoot
+  case explosion
+  case powerup
+  case hitHurt
+  case jump
+  case blipSelect
 }
-let maxGeneratorTypeRawValue = GeneratorType.blipSelect.rawValue
 
 func rnd(_ range: Int) -> Int {
   return Int(arc4random_uniform(UInt32(range) + 1))

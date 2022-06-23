@@ -26,37 +26,11 @@
 
 import Cocoa
 
-let ThemeChangedNotification = Notification.Name(rawValue: "ThemeChangedNotification")
-
 class WindowController: NSWindowController {
   @IBOutlet weak var waveTypeSegmentedControl: NSSegmentedControl!
   
   override func windowDidLoad() {
     super.windowDidLoad()
-    
     self.window!.titleVisibility = .hidden
-    
-    if UserDefaults.standard.bool(forKey: UseDarkModeKey) {
-      self.window?.appearance = NSAppearance(named: .vibrantDark)
-    }
-    else {
-      self.window?.appearance = nil
-    }
-    
-    NotificationCenter.default.addObserver(self, selector: #selector(WindowController.themeChanged(notification:)), name: ThemeChangedNotification, object: nil)
   }
-  
-  @objc func themeChanged(notification: Notification) {
-    if let useDarkTheme = notification.userInfo?[UseDarkModeKey] as? NSNumber {
-      if useDarkTheme.boolValue {
-        self.window?.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
-        UserDefaults.standard.set(useDarkTheme.boolValue, forKey: UseDarkModeKey)
-      }
-      else {
-        self.window?.appearance = nil
-        UserDefaults.standard.set(useDarkTheme.boolValue, forKey: UseDarkModeKey)
-      }
-    }
-  }
-  
 }

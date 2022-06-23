@@ -126,7 +126,7 @@ class SidebarViewController: NSViewController, NSOutlineViewDelegate, NSOutlineV
       return
     }
     
-    if 0 <= selectedItem.tag && selectedItem.tag <= maxGeneratorTypeRawValue {
+    if 0 <= selectedItem.tag && selectedItem.tag <= GeneratorType.allCases.count {
       Swift.print("select row \(self.outlineView.selectedRow)")
       self.outlineView.deselectAll(self)
       let generator = GeneratorType(rawValue: selectedItem.tag)!
