@@ -485,8 +485,11 @@ class SFXRGenerator {
     var data = Data(count: 256 * MemoryLayout<Int16>.size)
     while playingSample {
       var framesWritten = 0
-      data.withUnsafeMutableBytes {
-        framesWritten = synthSample(pointer: $0, numberOfFrames: 256, exportWave: true)
+      data.withUnsafeMutableBytes { rawMutableBufferPointer in
+          let bufferPointer = rawMutableBufferPointer.bindMemory(to: Int16.self)
+          if let address = bufferPointer.baseAddress {
+              framesWritten = synthSample(pointer: address, numberOfFrames: 256, exportWave: true)
+          }
       }
       let nbytes = framesWritten * MemoryLayout<Int16>.size
       for i in 0 ..< nbytes {
@@ -926,7 +929,7 @@ class SFXRGenerator {
     
     let ioUnit = try! AUAudioUnit(componentDescription: ioUnitDesc,
                                   options: AudioComponentInstantiationOptions())
-    let renderFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 44100.0, channels: 1, interleaved: false)
+    let renderFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 44100.0, channels: 1, interleaved: false)!
     try! ioUnit.inputBusses[0].setFormat(renderFormat)
     
     ioUnit.outputProvider = { (actionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
