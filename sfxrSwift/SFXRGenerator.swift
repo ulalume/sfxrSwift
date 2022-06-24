@@ -111,9 +111,9 @@ class SFXRGenerator {
     return p
   }
   
-  class func random() -> SFXRParams {
+  class func random(waveType: SFXRParams.WaveType?) -> SFXRParams {
     var p = SFXRParams()
-    p.waveType = SFXRParams.WaveType.allCases.randomElement()!
+    p.waveType = waveType ?? SFXRParams.WaveType.allCases.randomElement()!
     p.baseFreq = pow(frnd(2.0) - 1.0, 2.0)
     if Bool.random() {
       p.baseFreq = pow(frnd(2.0) - 1.0, 3.0) + 0.5

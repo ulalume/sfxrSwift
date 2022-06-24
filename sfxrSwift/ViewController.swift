@@ -87,7 +87,7 @@ class ViewController: NSSplitViewController {
   }
   
   @objc func randomize(notification: Notification) {
-    self.audio.parameters = SFXRGenerator.random()
+    self.audio.parameters = SFXRGenerator.random(waveType: self.audio.parameters.waveType)
     self.audio.play()
     updateUI()
   }
