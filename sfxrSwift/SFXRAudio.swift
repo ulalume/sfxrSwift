@@ -1,7 +1,8 @@
 /**
  Copyright (c) 2007 Tomas Pettersson
                2016 Yohei Yoshihara
- 
+               2022 Tetsuo Kubota
+
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
  files (the "Software"), to deal in the Software without
@@ -36,7 +37,7 @@ func frnd(_ range: Float) -> Float {
   return Float.random(in: 0...range)
 }
 
-class SFXRPlayer {
+class SFXRAudio {
   private let wavBits: Int = 16
   private let wavFreq: Int = 44100
   
@@ -146,7 +147,7 @@ class SFXRPlayer {
     self.ioUnit = ioUnit
   }
   
-  func resetSample(restart: Bool) {
+  private func resetSample(restart: Bool) {
     if !restart {
       phase = 0
     }
@@ -219,13 +220,13 @@ class SFXRPlayer {
     }
   }
   
-  func playSample() {
+  func play() {
     playingSample = false
     resetSample(restart: false)
     playingSample = true
   }
   
-  func synthSample(pointer _ptr: UnsafeMutablePointer<Int16>, numberOfFrames nframes: Int, exportWave: Bool = false) -> Int {
+  private func synthSample(pointer _ptr: UnsafeMutablePointer<Int16>, numberOfFrames nframes: Int, exportWave: Bool = false) -> Int {
     var ptr = _ptr
     
     var framesWritten = 0
@@ -430,7 +431,7 @@ class SFXRPlayer {
     var fileSampleswritten = 0
     filesample = 0.0
     fileacc = 0
-    playSample()
+    play()
     var data = Data(count: 256 * MemoryLayout<Int16>.size)
     while playingSample {
       var framesWritten = 0

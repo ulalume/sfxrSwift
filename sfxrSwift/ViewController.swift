@@ -32,7 +32,7 @@ let RandomizeSelectedNotification = Notification.Name(rawValue: "RandomizeSelect
 let ParameterChangedNotification = Notification.Name(rawValue: "ParameterChangedNotification")
 
 class ViewController: NSSplitViewController {
-  let player = SFXRPlayer()
+  let audio = SFXRAudio()
   var parameterViewController: ParameterViewController!
   
   override func viewDidLoad() {
@@ -54,10 +54,9 @@ class ViewController: NSSplitViewController {
                                            selector: #selector(ViewController.parameterChanged(notification:)),
                                            name: ParameterChangedNotification,
                                            object: nil)
-    //player.prepare()
     for vc in self.children {
       if let paramVC = vc as? ParameterViewController {
-        paramVC.updateUI(parameters: player.parameters)
+        paramVC.updateUI(parameters: audio.parameters)
         self.parameterViewController = paramVC
       }
     }
@@ -76,33 +75,33 @@ class ViewController: NSSplitViewController {
     guard let generator = notification.userInfo?["generator"] as? GeneratorType else {
       return
     }
-    self.player.parameters = SFXRGenerator.generate(generator: generator)
-    self.player.playSample()
+    self.audio.parameters = SFXRGenerator.generate(generator: generator)
+    self.audio.play()
     updateUI()
   }
   
   @objc func mutate(notification: Notification) {
-    self.player.parameters = SFXRGenerator.mutate(params: self.player.parameters)
-    self.player.playSample()
+    self.audio.parameters = SFXRGenerator.mutate(params: self.audio.parameters)
+    self.audio.play()
     updateUI()
   }
   
   @objc func randomize(notification: Notification) {
-    self.player.parameters = SFXRGenerator.random()
-    self.player.playSample()
+    self.audio.parameters = SFXRGenerator.random()
+    self.audio.play()
     updateUI()
   }
   
   func updateUI() {
-    self.parameterViewController.updateUI(parameters: self.player.parameters)
+    self.parameterViewController.updateUI(parameters: self.audio.parameters)
     if let winCtrl = self.view.window?.windowController as? WindowController {
-      winCtrl.waveTypeSegmentedControl.selectedSegment = self.player.parameters.waveType.rawValue
+      winCtrl.waveTypeSegmentedControl.selectedSegment = self.audio.parameters.waveType.rawValue
     }
   }
   
   @objc func parameterChanged(notification: Notification) {
-    self.parameterViewController.updateParameters(parameters: &self.player.parameters)
-    self.player.playSample()
+    self.parameterViewController.updateParameters(parameters: &self.audio.parameters)
+    self.audio.play()
   }
   
   @IBAction func export(_ sender: Any) {
@@ -116,7 +115,7 @@ class ViewController: NSSplitViewController {
     panel.beginSheetModal(for: window) { (result) in
       if result == .OK {
         if let url = panel.url {
-          let data = self.player.exportWAV()
+          let data = self.audio.exportWAV()
           try! data.write(to: url)
         }
       }
@@ -124,7 +123,7 @@ class ViewController: NSSplitViewController {
   }
   
   func play(_ sender: Any) {
-    self.player.playSample()
+    self.audio.play()
   }
 }
 

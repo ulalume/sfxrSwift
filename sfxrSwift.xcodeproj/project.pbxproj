@@ -17,7 +17,7 @@
 		4789BE871E361BB6008CD413 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4789BE821E361BB6008CD413 /* WindowController.swift */; };
 		4789BE891E361D31008CD413 /* BinaryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4789BE881E361D31008CD413 /* BinaryData.swift */; };
 		661589C8286572D700C318D9 /* SFXRParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661589C7286572D700C318D9 /* SFXRParams.swift */; };
-		661589CA2865750600C318D9 /* SFXRPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661589C92865750600C318D9 /* SFXRPlayer.swift */; };
+		661589CA2865750600C318D9 /* SFXRAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661589C92865750600C318D9 /* SFXRAudio.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,7 +34,7 @@
 		4789BE881E361D31008CD413 /* BinaryData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BinaryData.swift; sourceTree = "<group>"; };
 		4789BE8C1E362034008CD413 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		661589C7286572D700C318D9 /* SFXRParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFXRParams.swift; sourceTree = "<group>"; };
-		661589C92865750600C318D9 /* SFXRPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFXRPlayer.swift; sourceTree = "<group>"; };
+		661589C92865750600C318D9 /* SFXRAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFXRAudio.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +75,7 @@
 				4789BE7E1E361BB6008CD413 /* ParameterViewController.swift */,
 				661589C7286572D700C318D9 /* SFXRParams.swift */,
 				4789BE801E361BB6008CD413 /* SFXRGenerator.swift */,
-				661589C92865750600C318D9 /* SFXRPlayer.swift */,
+				661589C92865750600C318D9 /* SFXRAudio.swift */,
 				4789BE881E361D31008CD413 /* BinaryData.swift */,
 				4789BE731E361B5E008CD413 /* Assets.xcassets */,
 				4789BE751E361B5F008CD413 /* Main.storyboard */,
@@ -161,7 +161,7 @@
 				4789BE721E361B5E008CD413 /* ViewController.swift in Sources */,
 				4789BE871E361BB6008CD413 /* WindowController.swift in Sources */,
 				4789BE831E361BB6008CD413 /* ParameterViewController.swift in Sources */,
-				661589CA2865750600C318D9 /* SFXRPlayer.swift in Sources */,
+				661589CA2865750600C318D9 /* SFXRAudio.swift in Sources */,
 				4789BE701E361B5E008CD413 /* AppDelegate.swift in Sources */,
 				661589C8286572D700C318D9 /* SFXRParams.swift in Sources */,
 			);
