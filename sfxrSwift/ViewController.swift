@@ -32,7 +32,7 @@ let RandomizeSelectedNotification = Notification.Name(rawValue: "RandomizeSelect
 let ParameterChangedNotification = Notification.Name(rawValue: "ParameterChangedNotification")
 
 class ViewController: NSSplitViewController {
-  let sfxrGenerator = SFXRGenerator()
+  let player = SFXRPlayer()
   var parameterViewController: ParameterViewController!
   
   override func viewDidLoad() {
@@ -54,10 +54,10 @@ class ViewController: NSSplitViewController {
                                            selector: #selector(ViewController.parameterChanged(notification:)),
                                            name: ParameterChangedNotification,
                                            object: nil)
-    sfxrGenerator.prepare()
+    //player.prepare()
     for vc in self.children {
       if let paramVC = vc as? ParameterViewController {
-        paramVC.updateUI(parameters: sfxrGenerator.parameters)
+        paramVC.updateUI(parameters: player.parameters)
         self.parameterViewController = paramVC
       }
     }
@@ -76,70 +76,33 @@ class ViewController: NSSplitViewController {
     guard let generator = notification.userInfo?["generator"] as? GeneratorType else {
       return
     }
-    self.sfxrGenerator.play(generator: generator)
+    self.player.parameters = SFXRGenerator.generate(generator: generator)
+    self.player.playSample()
     updateUI()
   }
   
   @objc func mutate(notification: Notification) {
-    self.sfxrGenerator.mutate()
-    self.sfxrGenerator.playSample()
+    self.player.parameters = SFXRGenerator.mutate(params: self.player.parameters)
+    self.player.playSample()
     updateUI()
   }
   
   @objc func randomize(notification: Notification) {
-    self.sfxrGenerator.random()
-    self.sfxrGenerator.playSample()
+    self.player.parameters = SFXRGenerator.random(params: self.player.parameters)
+    self.player.playSample()
     updateUI()
   }
   
   func updateUI() {
-    self.parameterViewController.updateUI(parameters: self.sfxrGenerator.parameters)
+    self.parameterViewController.updateUI(parameters: self.player.parameters)
     if let winCtrl = self.view.window?.windowController as? WindowController {
-      winCtrl.waveTypeSegmentedControl.selectedSegment = self.sfxrGenerator.parameters.waveType.rawValue
+      winCtrl.waveTypeSegmentedControl.selectedSegment = self.player.parameters.waveType.rawValue
     }
   }
   
   @objc func parameterChanged(notification: Notification) {
-    self.parameterViewController.updateParameters(parameters: &self.sfxrGenerator.parameters)
-    self.sfxrGenerator.playSample()
-  }
-  
-  func openDocument(_ sender: Any) {
-    guard let window = self.view.window else {
-      return
-    }
-    let panel = NSOpenPanel()
-    panel.title = "Open"
-    panel.canChooseDirectories = false
-    panel.canChooseFiles = true
-    panel.allowsMultipleSelection = false
-    panel.allowedFileTypes = ["sfxr"]
-    panel.canSelectHiddenExtension = true
-    panel.beginSheetModal(for: window) { (result) in
-      if result == .OK {
-        if let url = panel.urls.first {
-          self.sfxrGenerator.loadSettings(url: url)
-          self.parameterViewController.updateUI(parameters: self.sfxrGenerator.parameters)
-        }
-      }
-    }
-  }
-  
-  func saveDocument(_ sender: Any) {
-    guard let window = self.view.window else {
-      return
-    }
-    let panel = NSSavePanel()
-    panel.title = "Save"
-    panel.allowedFileTypes = ["sfxr"]
-    panel.canSelectHiddenExtension = true
-    panel.beginSheetModal(for: window) { (result) in
-      if result == .OK {
-        if let url = panel.url {
-          self.sfxrGenerator.saveSettings(url: url)
-        }
-      }
-    }
+    self.parameterViewController.updateParameters(parameters: &self.player.parameters)
+    self.player.playSample()
   }
   
   @IBAction func export(_ sender: Any) {
@@ -153,7 +116,7 @@ class ViewController: NSSplitViewController {
     panel.beginSheetModal(for: window) { (result) in
       if result == .OK {
         if let url = panel.url {
-          let data = self.sfxrGenerator.exportWAV()
+          let data = self.player.exportWAV()
           try! data.write(to: url)
         }
       }
@@ -161,7 +124,7 @@ class ViewController: NSSplitViewController {
   }
   
   func play(_ sender: Any) {
-    self.sfxrGenerator.playSample()
+    self.player.playSample()
   }
 }
 
