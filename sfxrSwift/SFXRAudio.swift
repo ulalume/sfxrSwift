@@ -25,17 +25,8 @@
  OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Foundation
 import AudioToolbox
 import AVFoundation
-
-func rnd(_ range: Int) -> Int {
-  return Int(arc4random_uniform(UInt32(range) + 1))
-}
-
-func frnd(_ range: Float) -> Float {
-  return Float.random(in: 0...range)
-}
 
 class SFXRAudio {
   private let wavBits: Int = 16
@@ -209,7 +200,7 @@ class SFXRAudio {
       }
       
       for i in 0 ..< noiseBuffer.count {
-        noiseBuffer[i] = frnd(2.0) - 1.0
+        noiseBuffer[i] = Float.random(in: 0...2.0) - 1.0
       }
       
       repTime = 0
@@ -316,7 +307,7 @@ class SFXRAudio {
           phase %= period
           if p.waveType == .noise {
             for i in 0 ..< 32 {
-              noiseBuffer[i] = frnd(2.0) - 1.0
+              noiseBuffer[i] = Float.random(in: 0...2.0) - 1.0
             }
           }
         }
