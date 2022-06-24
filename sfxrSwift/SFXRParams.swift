@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SFXRParams : CustomStringConvertible, Codable {
+struct SFXRParams: CustomStringConvertible, Codable {
   enum WaveType: Int, RawRepresentable, CaseIterable, Codable {
     case square = 0
     case sawtooth
@@ -16,8 +16,6 @@ struct SFXRParams : CustomStringConvertible, Codable {
     case noise
   }
   var waveType: WaveType = .square
-  var soundVol: Float = 0.5
-  var masterVol: Float = 0.05
   
   var baseFreq: Float = 0.3
   var freqLimit: Float = 0.0

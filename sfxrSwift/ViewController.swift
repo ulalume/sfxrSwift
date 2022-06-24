@@ -88,7 +88,7 @@ class ViewController: NSSplitViewController {
   }
   
   @objc func randomize(notification: Notification) {
-    self.player.parameters = SFXRGenerator.random(params: self.player.parameters)
+    self.player.parameters = SFXRGenerator.random()
     self.player.playSample()
     updateUI()
   }

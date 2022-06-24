@@ -83,6 +83,9 @@ class SFXRPlayer {
     }
   }
   
+  var soundVol: Float = 0.5
+  var masterVol: Float = 0.05
+  
   private var phase: Int = 0
   private var fperiod: Double = 0.0
   private var fmaxperiod: Double = 0.0
@@ -361,9 +364,9 @@ class SFXRPlayer {
         // final accumulation and envelope application
         ssample += sample * envVol
       }
-      ssample = ssample / 8 * p.masterVol
+      ssample = ssample / 8 * masterVol
       
-      ssample *= 2.0 * p.soundVol
+      ssample *= 2.0 * soundVol
       
       if !exportWave {
         if ssample > 1.0 {

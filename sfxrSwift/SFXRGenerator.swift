@@ -84,8 +84,9 @@ class SFXRGenerator {
     return p
   }
   
-  class func random(params: SFXRParams) -> SFXRParams {
-    var p = params
+  class func random() -> SFXRParams {
+    var p = SFXRParams()
+    p.waveType = SFXRParams.WaveType.allCases.randomElement()!
     p.baseFreq = pow(frnd(2.0) - 1.0, 2.0)
     if Bool.random() {
       p.baseFreq = pow(frnd(2.0) - 1.0, 3.0) + 0.5
@@ -101,9 +102,11 @@ class SFXRGenerator {
     p.freqDramp = pow(frnd(2.0) - 1.0, 3.0)
     p.duty = frnd(2.0) - 1.0
     p.dutyRamp = pow(frnd(2.0) - 1.0, 3.0)
+    
     p.vibStrength = pow(frnd(2.0) - 1.0, 3.0)
     p.vibSpeed = frnd(2.0) - 1.0
     p.vibDelay = frnd(2.0) - 1.0
+    
     p.envAttack = pow(frnd(2.0) - 1.0, 3.0)
     p.envSustain = pow(frnd(2.0) - 1.0, 2.0)
     p.envDecay = frnd(2.0) - 1.0
@@ -112,6 +115,7 @@ class SFXRGenerator {
       p.envSustain += 0.2 + frnd(0.3)
       p.envDecay += 0.2 + frnd(0.3)
     }
+    
     p.lpfResonance = frnd(2.0) - 1.0
     p.lpfFreq = 1.0 - pow(frnd(1.0), 3.0)
     p.lpfRamp = pow(frnd(2.0) - 1.0, 3.0)
@@ -120,9 +124,12 @@ class SFXRGenerator {
     }
     p.hpfFreq = pow(frnd(1.0), 5.0)
     p.hpfRamp = pow(frnd(2.0) - 1.0, 5.0)
+    
     p.phaOffset = pow(frnd(2.0) - 1.0, 3.0)
     p.phaRamp = pow(frnd(2.0) - 1.0, 3.0)
+    
     p.repeatSpeed = frnd(2.0) - 1.0
+    
     p.arpSpeed = frnd(2.0) - 1.0
     p.arpMod = frnd(2.0) - 1.0
     return p
@@ -271,7 +278,6 @@ class SFXRGenerator {
       p.envDecay = frnd(0.2)
       p.hpfFreq = 0.1
     }
-    
     return p
   }
 }
