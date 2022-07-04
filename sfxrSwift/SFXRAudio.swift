@@ -121,8 +121,14 @@ class SFXRAudio {
   private var ioUnit: AUAudioUnit
   
   init() {
+    #if os(iOS)
+    let componentSubType = kAudioUnitSubType_RemoteIO
+    #elseif os(OSX)
+    let componentSubType = kAudioUnitSubType_HALOutput
+    #endif
+    
     let description = AudioComponentDescription(componentType: kAudioUnitType_Output,
-                                               componentSubType: kAudioUnitSubType_HALOutput,
+                                               componentSubType: componentSubType,
                                                componentManufacturer: kAudioUnitManufacturer_Apple,
                                                componentFlags: 0,
                                                componentFlagsMask: 0)
