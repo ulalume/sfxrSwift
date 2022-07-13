@@ -247,7 +247,7 @@ class ParameterViewController: NSViewController {
   }
   
   @objc func didSliderUpdate(_ sender: Any) {
-    NotificationCenter.default.post(name: ParameterChangedNotification, object: self)
+    NotificationCenter.default.post(name: parameterChangedNotification, object: self)
   }
   
 }

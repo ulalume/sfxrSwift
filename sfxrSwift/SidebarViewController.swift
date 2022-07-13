@@ -130,15 +130,15 @@ class SidebarViewController: NSViewController, NSOutlineViewDelegate, NSOutlineV
       Swift.print("select row \(self.outlineView.selectedRow)")
       self.outlineView.deselectAll(self)
       let generator = GeneratorType(rawValue: selectedItem.tag)!
-      NotificationCenter.default.post(name: GeneratorSelectedNotification, object: self, userInfo: ["generator" : generator])
+      NotificationCenter.default.post(name: generatorSelectedNotification, object: self, userInfo: ["generator" : generator])
     }
     else if selectedItem.tag == SidebarViewController.MutateTag {
       self.outlineView.deselectAll(self)
-      NotificationCenter.default.post(name: MutateSelectedNotification, object: self, userInfo: [:])
+      NotificationCenter.default.post(name: mutateSelectedNotification, object: self, userInfo: [:])
     }
     else if selectedItem.tag == SidebarViewController.RandomizeTag {
       self.outlineView.deselectAll(self)
-      NotificationCenter.default.post(name: RandomizeSelectedNotification, object: self, userInfo: [:])
+      NotificationCenter.default.post(name: randomizeSelectedNotification, object: self, userInfo: [:])
     }
   }
   

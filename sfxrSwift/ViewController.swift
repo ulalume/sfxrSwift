@@ -26,13 +26,13 @@
 
 import Cocoa
 
-let GeneratorSelectedNotification = Notification.Name(rawValue: "GeneratorSelectedNotification")
-let MutateSelectedNotification = Notification.Name(rawValue: "MutateSelectedNotification")
-let RandomizeSelectedNotification = Notification.Name(rawValue: "RandomizeSelectedNotification")
-let ParameterChangedNotification = Notification.Name(rawValue: "ParameterChangedNotification")
+let generatorSelectedNotification = Notification.Name(rawValue: "GeneratorSelectedNotification")
+let mutateSelectedNotification = Notification.Name(rawValue: "MutateSelectedNotification")
+let randomizeSelectedNotification = Notification.Name(rawValue: "RandomizeSelectedNotification")
+let parameterChangedNotification = Notification.Name(rawValue: "ParameterChangedNotification")
 
 class ViewController: NSSplitViewController {
-  let audio = SFXRAudio()
+  let audio = try! SFXRAudio()
   var parameterViewController: ParameterViewController!
   
   override func viewDidLoad() {
@@ -40,19 +40,19 @@ class ViewController: NSSplitViewController {
     
     NotificationCenter.default.addObserver(self,
                                            selector: #selector(ViewController.generatorSelected(notification:)),
-                                           name: GeneratorSelectedNotification,
+                                           name: generatorSelectedNotification,
                                            object: nil)
     NotificationCenter.default.addObserver(self,
                                            selector: #selector(ViewController.mutate(notification:)),
-                                           name: MutateSelectedNotification,
+                                           name: mutateSelectedNotification,
                                            object: nil)
     NotificationCenter.default.addObserver(self,
                                            selector: #selector(ViewController.randomize(notification:)),
-                                           name: RandomizeSelectedNotification,
+                                           name: randomizeSelectedNotification,
                                            object: nil)
     NotificationCenter.default.addObserver(self,
                                            selector: #selector(ViewController.parameterChanged(notification:)),
-                                           name: ParameterChangedNotification,
+                                           name: parameterChangedNotification,
                                            object: nil)
     for vc in self.children {
       if let paramVC = vc as? ParameterViewController {

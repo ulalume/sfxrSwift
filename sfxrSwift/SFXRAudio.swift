@@ -46,7 +46,7 @@ class SFXRAudio {
   private var playingSample = false {
     didSet {
       if (!oldValue && playingSample) {
-        ioUnit.outputProvider = { (actionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
+        audioUnit.outputProvider = { (actionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
           timestamp: UnsafePointer<AudioTimeStamp>,
           frameCount: AUAudioFrameCount,
           busIndex: Int,
@@ -70,7 +70,7 @@ class SFXRAudio {
           return noErr
         }
       }else if (oldValue && !playingSample) {
-        ioUnit.outputProvider = nil
+        audioUnit.outputProvider = nil
       }
     }
   }
@@ -118,9 +118,9 @@ class SFXRAudio {
   
   private var muteStream: Bool = false
   
-  private var ioUnit: AUAudioUnit
+  private var audioUnit: AUAudioUnit
   
-  init() {
+  init() throws {
     #if os(iOS)
     let componentSubType = kAudioUnitSubType_RemoteIO
     #elseif os(OSX)
@@ -133,15 +133,15 @@ class SFXRAudio {
                                                componentFlags: 0,
                                                componentFlagsMask: 0)
     
-    let ioUnit = try! AUAudioUnit(componentDescription: description,
+    let audioUnit = try! AUAudioUnit(componentDescription: description,
                                   options: AudioComponentInstantiationOptions())
     let renderFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 44100.0, channels: 1, interleaved: false)!
-    try! ioUnit.inputBusses[0].setFormat(renderFormat)
+    try! audioUnit.inputBusses[0].setFormat(renderFormat)
     
-    try! ioUnit.allocateRenderResources()
-    try! ioUnit.startHardware()
+    try! audioUnit.allocateRenderResources()
+    try! audioUnit.startHardware()
     
-    self.ioUnit = ioUnit
+    self.audioUnit = audioUnit
   }
   
   private func resetSample(restart: Bool) {
@@ -453,7 +453,7 @@ class SFXRAudio {
   }
   
   deinit {
-    ioUnit.stopHardware()
+    audioUnit.stopHardware()
   }
 }
 
