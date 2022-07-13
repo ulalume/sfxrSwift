@@ -25,6 +25,7 @@
  */
 
 import Cocoa
+import SFXRSwiftLib
 
 class Header: Equatable {
   var label: String
@@ -58,13 +59,13 @@ class SidebarViewController: NSViewController, NSOutlineViewDelegate, NSOutlineV
   
   var headers = [
     Header(label: "Generator", items: [
-      Item(label: "Pickup/Coin", tag: GeneratorType.pickupCoin.rawValue),
-      Item(label: "Laser/Shoot", tag: GeneratorType.laserShoot.rawValue),
-      Item(label: "Explosion", tag: GeneratorType.explosion.rawValue),
-      Item(label: "Powerup", tag: GeneratorType.powerup.rawValue),
-      Item(label: "Hit/Hurt", tag: GeneratorType.hitHurt.rawValue),
-      Item(label: "Jump", tag: GeneratorType.jump.rawValue),
-      Item(label: "Blip/Select", tag: GeneratorType.blipSelect.rawValue),
+      Item(label: "Pickup/Coin", tag: SFXRGenerator.GeneratorType.pickupCoin.rawValue),
+      Item(label: "Laser/Shoot", tag: SFXRGenerator.GeneratorType.laserShoot.rawValue),
+      Item(label: "Explosion", tag: SFXRGenerator.GeneratorType.explosion.rawValue),
+      Item(label: "Powerup", tag: SFXRGenerator.GeneratorType.powerup.rawValue),
+      Item(label: "Hit/Hurt", tag: SFXRGenerator.GeneratorType.hitHurt.rawValue),
+      Item(label: "Jump", tag: SFXRGenerator.GeneratorType.jump.rawValue),
+      Item(label: "Blip/Select", tag: SFXRGenerator.GeneratorType.blipSelect.rawValue),
       ]),
     Header(label: "Quick", items: [
       Item(label: "Mutate", tag: MutateTag),
@@ -126,10 +127,10 @@ class SidebarViewController: NSViewController, NSOutlineViewDelegate, NSOutlineV
       return
     }
     
-    if 0 <= selectedItem.tag && selectedItem.tag <= GeneratorType.allCases.count {
+    if 0 <= selectedItem.tag && selectedItem.tag <= SFXRGenerator.GeneratorType.allCases.count {
       Swift.print("select row \(self.outlineView.selectedRow)")
       self.outlineView.deselectAll(self)
-      let generator = GeneratorType(rawValue: selectedItem.tag)!
+      let generator = SFXRGenerator.GeneratorType(rawValue: selectedItem.tag)!
       NotificationCenter.default.post(name: generatorSelectedNotification, object: self, userInfo: ["generator" : generator])
     }
     else if selectedItem.tag == SidebarViewController.MutateTag {

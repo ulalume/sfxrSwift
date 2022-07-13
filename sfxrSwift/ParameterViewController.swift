@@ -25,6 +25,7 @@
  */
 
 import Cocoa
+import SFXRSwiftLib
 
 func createHorizontalLine() -> NSBox {
   let line = NSBox()

@@ -25,6 +25,7 @@
  */
 
 import Cocoa
+import SFXRSwiftLib
 
 let generatorSelectedNotification = Notification.Name(rawValue: "GeneratorSelectedNotification")
 let mutateSelectedNotification = Notification.Name(rawValue: "MutateSelectedNotification")
@@ -72,7 +73,7 @@ class ViewController: NSSplitViewController {
   }
   
   @objc func generatorSelected(notification: Notification) {
-    guard let generator = notification.userInfo?["generator"] as? GeneratorType else {
+    guard let generator = notification.userInfo?["generator"] as? SFXRGenerator.GeneratorType else {
       return
     }
     self.audio.parameters = SFXRGenerator.generate(generator: generator)
