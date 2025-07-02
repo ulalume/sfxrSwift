@@ -26,12 +26,13 @@
 
 import Cocoa
 
-func createHorizontalLine() -> NSBox {
+@MainActor func createHorizontalLine() -> NSBox {
   let line = NSBox()
   line.boxType = .separator
   return line
 }
 
+@MainActor
 func createSlider(value: Double, bipolar: Bool, target: Any) -> NSSlider {
   if !bipolar {
     let slider = NSSlider(value: value, minValue: 0.0, maxValue: 1.0,
