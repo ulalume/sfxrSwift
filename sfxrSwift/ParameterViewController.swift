@@ -183,7 +183,7 @@ class ParameterViewController: NSViewController {
     NSLayoutConstraint.activate(verticallConstraints)
   }
   
-  func updateUI(parameters params: Parameters) {
+  func updateUI(parameters params: SFXRParameters) {
     self.envelopeAttackTimeSlider.floatValue = params.envAttack
     self.envelopeSustainTimeSlider.floatValue = params.envSustain
     self.envelopeSustainPunchSlider.floatValue = params.envPunch
@@ -215,7 +215,7 @@ class ParameterViewController: NSViewController {
     self.highpassFilterCutoffSweepSlider.floatValue = params.hpfRamp
   }
   
-  func updateParameters(parameters params: inout Parameters) {
+  func updateParameters(parameters params: inout SFXRParameters) {
     params.envAttack = self.envelopeAttackTimeSlider.floatValue
     params.envSustain = self.envelopeSustainTimeSlider.floatValue
     params.envPunch = self.envelopeSustainPunchSlider.floatValue
