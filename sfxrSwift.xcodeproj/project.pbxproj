@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4789BE741E361B5E008CD413 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4789BE731E361B5E008CD413 /* Assets.xcassets */; };
-		4789BE771E361B5F008CD413 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4789BE751E361B5F008CD413 /* Main.storyboard */; };
 		4789BE891E361D31008CD413 /* BinaryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4789BE881E361D31008CD413 /* BinaryData.swift */; };
+		6649F98D2E17A47600295048 /* ParamsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6649F98C2E17A47600295048 /* ParamsView.swift */; };
 		666451D22E156C6D00830330 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666451D12E156C6800830330 /* SoundPlayer.swift */; };
 		66D1ADF92E15268C0079F3AA /* SFXRParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D1ADF82E15268C0079F3AA /* SFXRParameters.swift */; };
 		66D1ADFB2E152EBB0079F3AA /* SFXRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D1ADFA2E152EAD0079F3AA /* SFXRApp.swift */; };
@@ -20,10 +20,10 @@
 /* Begin PBXFileReference section */
 		4789BE6C1E361B5E008CD413 /* sfxrSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sfxrSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4789BE731E361B5E008CD413 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		4789BE761E361B5F008CD413 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4789BE781E361B5F008CD413 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4789BE881E361D31008CD413 /* BinaryData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BinaryData.swift; sourceTree = "<group>"; };
 		4789BE8C1E362034008CD413 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		6649F98C2E17A47600295048 /* ParamsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParamsView.swift; sourceTree = "<group>"; };
 		666451D12E156C6800830330 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		66D1ADF82E15268C0079F3AA /* SFXRParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFXRParameters.swift; sourceTree = "<group>"; };
 		66D1ADFA2E152EAD0079F3AA /* SFXRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFXRApp.swift; sourceTree = "<group>"; };
@@ -62,14 +62,14 @@
 		4789BE6E1E361B5E008CD413 /* sfxrSwift */ = {
 			isa = PBXGroup;
 			children = (
+				66D1ADFA2E152EAD0079F3AA /* SFXRApp.swift */,
 				666451D12E156C6800830330 /* SoundPlayer.swift */,
 				66D1AE112E152F470079F3AA /* Params.swift */,
 				66D1AE0F2E152EFF0079F3AA /* ContentView.swift */,
-				66D1ADFA2E152EAD0079F3AA /* SFXRApp.swift */,
 				66D1ADF82E15268C0079F3AA /* SFXRParameters.swift */,
 				4789BE881E361D31008CD413 /* BinaryData.swift */,
+				6649F98C2E17A47600295048 /* ParamsView.swift */,
 				4789BE731E361B5E008CD413 /* Assets.xcassets */,
-				4789BE751E361B5F008CD413 /* Main.storyboard */,
 				4789BE781E361B5F008CD413 /* Info.plist */,
 			);
 			path = sfxrSwift;
@@ -108,7 +108,6 @@
 				TargetAttributes = {
 					4789BE6B1E361B5E008CD413 = {
 						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -136,7 +135,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4789BE741E361B5E008CD413 /* Assets.xcassets in Resources */,
-				4789BE771E361B5F008CD413 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				66D1ADFB2E152EBB0079F3AA /* SFXRApp.swift in Sources */,
+				6649F98D2E17A47600295048 /* ParamsView.swift in Sources */,
 				66D1ADF92E15268C0079F3AA /* SFXRParameters.swift in Sources */,
 				4789BE891E361D31008CD413 /* BinaryData.swift in Sources */,
 				66D1AE122E152F4B0079F3AA /* Params.swift in Sources */,
@@ -157,17 +156,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		4789BE751E361B5F008CD413 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4789BE761E361B5F008CD413 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		4789BE791E361B5F008CD413 /* Debug */ = {
@@ -287,17 +275,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 3LDQDD29CC;
 				INFOPLIST_FILE = sfxrSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cx5software.sfxrSwift;
+				PRODUCT_BUNDLE_IDENTIFIER = me.ulalu.sfxrSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 6.0;
@@ -309,17 +300,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 3LDQDD29CC;
 				INFOPLIST_FILE = sfxrSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cx5software.sfxrSwift;
+				PRODUCT_BUNDLE_IDENTIFIER = me.ulalu.sfxrSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 6.0;

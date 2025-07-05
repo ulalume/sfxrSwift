@@ -16,24 +16,30 @@ final class Params {
     
     @Transient private var _sfxrParameters: SFXRParameters?
     var sfxrParameters: SFXRParameters {
-        if let _sfxrParameters {
-            return _sfxrParameters
+        get {
+            if let _sfxrParameters {
+                return _sfxrParameters
+            }
+            let sfxrParameters = SFXRParameters(from: params)
+            _sfxrParameters = sfxrParameters
+            return sfxrParameters
         }
-        let sfxrParameters = SFXRParameters(from: params)
-        _sfxrParameters = sfxrParameters
-        return sfxrParameters
+        set {
+            _sfxrParameters = newValue
+            params = newValue.exportData()
+        }
     }
     
-    @Transient private var _wave: Data?
-    var wave: Data {
-        if let _wave {
-            return _wave
-        }
-        let wave = sfxrParameters.exportWav()
-        _wave = wave
-        return wave
-    }
-    
+//    @Transient private var _wave: Data?
+//    var wave: Data {
+//        if let _wave {
+//            return _wave
+//        }
+//        let wave = sfxrParameters.exportWav()
+//        _wave = wave
+//        return wave
+//    }
+//    
     
     init(timestamp: Date, params: SFXRParameters) {
         self.timestamp = timestamp

@@ -1,11 +1,20 @@
 import Foundation
 import Observation
 
-enum WaveType: Int, RawRepresentable {
+enum WaveType: Int, RawRepresentable, CaseIterable {
     case square = 0
     case sawtooth = 1
     case sine = 2
     case noise = 3
+    
+    var label: String {
+        switch self {
+        case .square: return "Square"
+        case .sawtooth: return "Sawtooth"
+        case .sine: return "Sine"
+        case .noise: return "Noise"
+        }
+    }
 }
 
 let maxWaveTypeRawValue = WaveType.noise.rawValue
@@ -18,6 +27,29 @@ enum GeneratorType: Int, CaseIterable {
     case hitHurt = 4
     case jump = 5
     case blipSelect = 6
+    
+    var label: String {
+        switch self {
+        case .pickupCoin: return "Pickup/Coin"
+        case .laserShoot: return "Laser/Shoot"
+        case .explosion: return "Explosion"
+        case .powerup: return "Powerup"
+        case .hitHurt: return "Hit/Hurt"
+        case .jump: return "Jump"
+        case .blipSelect: return "Blip/Select"
+        }
+    }
+    var systemImage: String {
+        switch self {
+        case .pickupCoin: return "dollarsign.circle.fill"
+        case .laserShoot: return "bolt.fill"
+        case .explosion: return "flame.fill"
+        case .powerup: return "star.fill"
+        case .hitHurt: return "cross.fill"
+        case .jump: return "figure.jumprope"
+        case .blipSelect: return "checkmark.circle.fill"
+        }
+    }
 }
 
 fileprivate func rnd(_ range: Int) -> Int {
@@ -92,272 +124,6 @@ class SFXRParameters: CustomStringConvertible {
         "lpfFreq=\(lpfFreq), lpfRamp=\(lpfRamp), hpfFreq=\(hpfFreq), hpfRamp=\(hpfRamp), " +
         "phaOffset=\(phaOffset), phaRamp=\(phaRamp), repeatSpeed=\(repeatSpeed), arpSpeed=\(arpSpeed), " +
         "arpMod=\(arpMod)"
-    }
-
-    static func random() -> SFXRParameters {
-        let p = SFXRParameters()
-        p.baseFreq = pow(frnd(2.0) - 1.0, 2.0)
-        if Bool.random() {
-            p.baseFreq = pow(frnd(2.0) - 1.0, 3.0) + 0.5
-        }
-        p.freqLimit = 0.0
-        p.freqRamp = pow(frnd(2.0) - 1.0, 5.0)
-        if p.baseFreq > 0.7, p.freqRamp > 0.2 {
-            p.freqRamp = -p.freqRamp
-        }
-        if p.baseFreq < 0.2, p.freqRamp < -0.05 {
-            p.freqRamp = -p.freqRamp
-        }
-        p.freqDramp = pow(frnd(2.0) - 1.0, 3.0)
-        p.duty = frnd(2.0) - 1.0
-        p.dutyRamp = pow(frnd(2.0) - 1.0, 3.0)
-        p.vibStrength = pow(frnd(2.0) - 1.0, 3.0)
-        p.vibSpeed = frnd(2.0) - 1.0
-        p.vibDelay = frnd(2.0) - 1.0
-        p.envAttack = pow(frnd(2.0) - 1.0, 3.0)
-        p.envSustain = pow(frnd(2.0) - 1.0, 2.0)
-        p.envDecay = frnd(2.0) - 1.0
-        p.envPunch = pow(frnd(0.8), 2.0)
-        if p.envAttack + p.envSustain + p.envDecay < 0.2 {
-            p.envSustain += 0.2 + frnd(0.3)
-            p.envDecay += 0.2 + frnd(0.3)
-        }
-        p.lpfResonance = frnd(2.0) - 1.0
-        p.lpfFreq = 1.0 - pow(frnd(1.0), 3.0)
-        p.lpfRamp = pow(frnd(2.0) - 1.0, 3.0)
-        if p.lpfFreq < 0.1, p.lpfRamp < -0.05 {
-            p.lpfRamp = -p.lpfRamp
-        }
-        p.hpfFreq = pow(frnd(1.0), 5.0)
-        p.hpfRamp = pow(frnd(2.0) - 1.0, 5.0)
-        p.phaOffset = pow(frnd(2.0) - 1.0, 3.0)
-        p.phaRamp = pow(frnd(2.0) - 1.0, 3.0)
-        p.repeatSpeed = frnd(2.0) - 1.0
-        p.arpSpeed = frnd(2.0) - 1.0
-        p.arpMod = frnd(2.0) - 1.0
-        return p
-    }
-
-    func mutate() {
-        if Bool.random() {
-            baseFreq += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            freqRamp += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            freqDramp += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            duty += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            dutyRamp += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            vibStrength += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            vibSpeed += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            vibDelay += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            envAttack += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            envSustain += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            envDecay += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            envPunch += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            lpfResonance += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            lpfFreq += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            lpfRamp += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            hpfFreq += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            hpfRamp += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            phaOffset += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            phaRamp += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            repeatSpeed += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            arpSpeed += frnd(0.1) - 0.05
-        }
-        if Bool.random() {
-            arpMod += frnd(0.1) - 0.05
-        }
-    }
-
-    static func template(for type: GeneratorType) -> SFXRParameters {
-        let p = SFXRParameters()
-        switch type {
-        case .pickupCoin:
-            p.reset()
-            p.baseFreq = 0.4 + frnd(0.5)
-            p.envAttack = 0.0
-            p.envSustain = frnd(0.1)
-            p.envDecay = 0.1 + frnd(0.4)
-            p.envPunch = 0.3 + frnd(0.3)
-            if Bool.random() {
-                p.arpSpeed = 0.5 + frnd(0.2)
-                p.arpMod = 0.2 + frnd(0.4)
-            }
-        case .laserShoot:
-            p.reset()
-            p.waveType = WaveType(rawValue: rnd(2))!
-            if p.waveType == .sine, Bool.random() {
-                p.waveType = WaveType(rawValue: rnd(1))!
-            }
-            p.baseFreq = 0.5 + frnd(0.5)
-            p.freqLimit = p.baseFreq - 0.2 - frnd(0.6)
-            if p.freqLimit < 0.2 {
-                p.freqLimit = 0.2
-            }
-            p.freqRamp = -0.15 - frnd(0.2)
-            if rnd(2) == 0 {
-                p.baseFreq = 0.3 + frnd(0.6)
-                p.freqLimit = frnd(0.1)
-                p.freqRamp = -0.35 - frnd(0.3)
-            }
-            if Bool.random() {
-                p.duty = frnd(0.5)
-                p.dutyRamp = frnd(0.2)
-            } else {
-                p.duty = 0.4 + frnd(0.5)
-                p.dutyRamp = -frnd(0.7)
-            }
-            p.envAttack = 0.0
-            p.envSustain = 0.1 + frnd(0.2)
-            p.envDecay = frnd(0.4)
-            if Bool.random() {
-                p.envPunch = frnd(0.3)
-            }
-            if rnd(2) == 0 {
-                p.phaOffset = frnd(0.2)
-                p.phaRamp = -frnd(0.2)
-            }
-            if Bool.random() {
-                p.hpfFreq = frnd(0.3)
-            }
-        case .explosion:
-            p.reset()
-            p.waveType = .noise
-            if Bool.random() {
-                p.baseFreq = 0.1 + frnd(0.4)
-                p.freqRamp = -0.1 + frnd(0.4)
-            } else {
-                p.baseFreq = 0.2 + frnd(0.7)
-                p.freqRamp = -0.2 - frnd(0.2)
-            }
-            p.baseFreq *= p.baseFreq
-            if rnd(4) == 0 {
-                p.freqRamp = 0.0
-            }
-            if rnd(2) == 0 {
-                p.repeatSpeed = 0.3 + frnd(0.5)
-            }
-            p.envAttack = 0.0
-            p.envSustain = 0.1 + frnd(0.3)
-            p.envDecay = frnd(0.5)
-            if rnd(1) == 0 {
-                p.phaOffset = -0.3 + frnd(0.9)
-                p.phaRamp = -frnd(0.3)
-            }
-            p.envPunch = 0.2 + frnd(0.6)
-            if Bool.random() {
-                p.vibStrength = frnd(0.7)
-                p.vibSpeed = frnd(0.6)
-            }
-            if rnd(2) == 0 {
-                p.arpSpeed = 0.6 + frnd(0.3)
-                p.arpMod = 0.8 - frnd(1.6)
-            }
-        case .powerup:
-            p.reset()
-            if Bool.random() {
-                p.waveType = .sawtooth
-            } else {
-                p.duty = frnd(0.6)
-            }
-            if Bool.random() {
-                p.baseFreq = 0.2 + frnd(0.3)
-                p.freqRamp = 0.1 + frnd(0.4)
-                p.repeatSpeed = 0.4 + frnd(0.4)
-            } else {
-                p.baseFreq = 0.2 + frnd(0.3)
-                p.freqRamp = 0.05 + frnd(0.2)
-                if Bool.random() {
-                    p.vibStrength = frnd(0.7)
-                    p.vibSpeed = frnd(0.6)
-                }
-            }
-            p.envAttack = 0.0
-            p.envSustain = frnd(0.4)
-            p.envDecay = 0.1 + frnd(0.4)
-        case .hitHurt:
-            p.reset()
-            p.waveType = WaveType(rawValue: rnd(2))!
-            if p.waveType == .sine {
-                p.waveType = .noise
-            }
-            if p.waveType == .square {
-                p.duty = frnd(0.6)
-            }
-            p.baseFreq = 0.2 + frnd(0.6)
-            p.freqRamp = -0.3 - frnd(0.4)
-            p.envAttack = 0.0
-            p.envSustain = frnd(0.1)
-            p.envDecay = 0.1 + frnd(0.2)
-            if Bool.random() {
-                p.hpfFreq = frnd(0.3)
-            }
-        case .jump:
-            p.reset()
-            p.waveType = .square
-            p.duty = frnd(0.6)
-            p.baseFreq = 0.3 + frnd(0.3)
-            p.freqRamp = 0.1 + frnd(0.2)
-            p.envAttack = 0.0
-            p.envSustain = 0.1 + frnd(0.3)
-            p.envDecay = 0.1 + frnd(0.2)
-            if Bool.random() {
-                p.hpfFreq = frnd(0.3)
-            }
-            if Bool.random() {
-                p.lpfFreq = 1.0 - frnd(0.6)
-            }
-        case .blipSelect:
-            p.reset()
-            p.waveType = WaveType(rawValue: rnd(1))!
-            if p.waveType == .square {
-                p.duty = frnd(0.6)
-            }
-            p.baseFreq = 0.2 + frnd(0.4)
-            p.envAttack = 0.0
-            p.envSustain = 0.1 + frnd(0.1)
-            p.envDecay = frnd(0.2)
-            p.hpfFreq = 0.1
-        }
-        return p
     }
 
     func exportData() -> Data {
@@ -768,3 +534,273 @@ class SFXRParameters: CustomStringConvertible {
         return framesWritten
     }
 } 
+
+// Random generation and mutation methods
+extension SFXRParameters {
+    static func random() -> SFXRParameters {
+        let p = SFXRParameters()
+        p.baseFreq = pow(frnd(2.0) - 1.0, 2.0)
+        if Bool.random() {
+            p.baseFreq = pow(frnd(2.0) - 1.0, 3.0) + 0.5
+        }
+        p.freqLimit = 0.0
+        p.freqRamp = pow(frnd(2.0) - 1.0, 5.0)
+        if p.baseFreq > 0.7, p.freqRamp > 0.2 {
+            p.freqRamp = -p.freqRamp
+        }
+        if p.baseFreq < 0.2, p.freqRamp < -0.05 {
+            p.freqRamp = -p.freqRamp
+        }
+        p.freqDramp = pow(frnd(2.0) - 1.0, 3.0)
+        p.duty = frnd(2.0) - 1.0
+        p.dutyRamp = pow(frnd(2.0) - 1.0, 3.0)
+        p.vibStrength = pow(frnd(2.0) - 1.0, 3.0)
+        p.vibSpeed = frnd(2.0) - 1.0
+        p.vibDelay = frnd(2.0) - 1.0
+        p.envAttack = pow(frnd(2.0) - 1.0, 3.0)
+        p.envSustain = pow(frnd(2.0) - 1.0, 2.0)
+        p.envDecay = frnd(2.0) - 1.0
+        p.envPunch = pow(frnd(0.8), 2.0)
+        if p.envAttack + p.envSustain + p.envDecay < 0.2 {
+            p.envSustain += 0.2 + frnd(0.3)
+            p.envDecay += 0.2 + frnd(0.3)
+        }
+        p.lpfResonance = frnd(2.0) - 1.0
+        p.lpfFreq = 1.0 - pow(frnd(1.0), 3.0)
+        p.lpfRamp = pow(frnd(2.0) - 1.0, 3.0)
+        if p.lpfFreq < 0.1, p.lpfRamp < -0.05 {
+            p.lpfRamp = -p.lpfRamp
+        }
+        p.hpfFreq = pow(frnd(1.0), 5.0)
+        p.hpfRamp = pow(frnd(2.0) - 1.0, 5.0)
+        p.phaOffset = pow(frnd(2.0) - 1.0, 3.0)
+        p.phaRamp = pow(frnd(2.0) - 1.0, 3.0)
+        p.repeatSpeed = frnd(2.0) - 1.0
+        p.arpSpeed = frnd(2.0) - 1.0
+        p.arpMod = frnd(2.0) - 1.0
+        return p
+    }
+    
+    func mutate() {
+        if Bool.random() {
+            baseFreq += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            freqRamp += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            freqDramp += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            duty += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            dutyRamp += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            vibStrength += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            vibSpeed += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            vibDelay += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            envAttack += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            envSustain += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            envDecay += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            envPunch += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            lpfResonance += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            lpfFreq += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            lpfRamp += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            hpfFreq += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            hpfRamp += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            phaOffset += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            phaRamp += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            repeatSpeed += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            arpSpeed += frnd(0.1) - 0.05
+        }
+        if Bool.random() {
+            arpMod += frnd(0.1) - 0.05
+        }
+    }
+    
+    static func template(for type: GeneratorType) -> SFXRParameters {
+        let p = SFXRParameters()
+        switch type {
+        case .pickupCoin:
+            p.reset()
+            p.baseFreq = 0.4 + frnd(0.5)
+            p.envAttack = 0.0
+            p.envSustain = frnd(0.1)
+            p.envDecay = 0.1 + frnd(0.4)
+            p.envPunch = 0.3 + frnd(0.3)
+            if Bool.random() {
+                p.arpSpeed = 0.5 + frnd(0.2)
+                p.arpMod = 0.2 + frnd(0.4)
+            }
+        case .laserShoot:
+            p.reset()
+            p.waveType = WaveType(rawValue: rnd(2))!
+            if p.waveType == .sine, Bool.random() {
+                p.waveType = WaveType(rawValue: rnd(1))!
+            }
+            p.baseFreq = 0.5 + frnd(0.5)
+            p.freqLimit = p.baseFreq - 0.2 - frnd(0.6)
+            if p.freqLimit < 0.2 {
+                p.freqLimit = 0.2
+            }
+            p.freqRamp = -0.15 - frnd(0.2)
+            if rnd(2) == 0 {
+                p.baseFreq = 0.3 + frnd(0.6)
+                p.freqLimit = frnd(0.1)
+                p.freqRamp = -0.35 - frnd(0.3)
+            }
+            if Bool.random() {
+                p.duty = frnd(0.5)
+                p.dutyRamp = frnd(0.2)
+            } else {
+                p.duty = 0.4 + frnd(0.5)
+                p.dutyRamp = -frnd(0.7)
+            }
+            p.envAttack = 0.0
+            p.envSustain = 0.1 + frnd(0.2)
+            p.envDecay = frnd(0.4)
+            if Bool.random() {
+                p.envPunch = frnd(0.3)
+            }
+            if rnd(2) == 0 {
+                p.phaOffset = frnd(0.2)
+                p.phaRamp = -frnd(0.2)
+            }
+            if Bool.random() {
+                p.hpfFreq = frnd(0.3)
+            }
+        case .explosion:
+            p.reset()
+            p.waveType = .noise
+            if Bool.random() {
+                p.baseFreq = 0.1 + frnd(0.4)
+                p.freqRamp = -0.1 + frnd(0.4)
+            } else {
+                p.baseFreq = 0.2 + frnd(0.7)
+                p.freqRamp = -0.2 - frnd(0.2)
+            }
+            p.baseFreq *= p.baseFreq
+            if rnd(4) == 0 {
+                p.freqRamp = 0.0
+            }
+            if rnd(2) == 0 {
+                p.repeatSpeed = 0.3 + frnd(0.5)
+            }
+            p.envAttack = 0.0
+            p.envSustain = 0.1 + frnd(0.3)
+            p.envDecay = frnd(0.5)
+            if rnd(1) == 0 {
+                p.phaOffset = -0.3 + frnd(0.9)
+                p.phaRamp = -frnd(0.3)
+            }
+            p.envPunch = 0.2 + frnd(0.6)
+            if Bool.random() {
+                p.vibStrength = frnd(0.7)
+                p.vibSpeed = frnd(0.6)
+            }
+            if rnd(2) == 0 {
+                p.arpSpeed = 0.6 + frnd(0.3)
+                p.arpMod = 0.8 - frnd(1.6)
+            }
+        case .powerup:
+            p.reset()
+            if Bool.random() {
+                p.waveType = .sawtooth
+            } else {
+                p.duty = frnd(0.6)
+            }
+            if Bool.random() {
+                p.baseFreq = 0.2 + frnd(0.3)
+                p.freqRamp = 0.1 + frnd(0.4)
+                p.repeatSpeed = 0.4 + frnd(0.4)
+            } else {
+                p.baseFreq = 0.2 + frnd(0.3)
+                p.freqRamp = 0.05 + frnd(0.2)
+                if Bool.random() {
+                    p.vibStrength = frnd(0.7)
+                    p.vibSpeed = frnd(0.6)
+                }
+            }
+            p.envAttack = 0.0
+            p.envSustain = frnd(0.4)
+            p.envDecay = 0.1 + frnd(0.4)
+        case .hitHurt:
+            p.reset()
+            p.waveType = WaveType(rawValue: rnd(2))!
+            if p.waveType == .sine {
+                p.waveType = .noise
+            }
+            if p.waveType == .square {
+                p.duty = frnd(0.6)
+            }
+            p.baseFreq = 0.2 + frnd(0.6)
+            p.freqRamp = -0.3 - frnd(0.4)
+            p.envAttack = 0.0
+            p.envSustain = frnd(0.1)
+            p.envDecay = 0.1 + frnd(0.2)
+            if Bool.random() {
+                p.hpfFreq = frnd(0.3)
+            }
+        case .jump:
+            p.reset()
+            p.waveType = .square
+            p.duty = frnd(0.6)
+            p.baseFreq = 0.3 + frnd(0.3)
+            p.freqRamp = 0.1 + frnd(0.2)
+            p.envAttack = 0.0
+            p.envSustain = 0.1 + frnd(0.3)
+            p.envDecay = 0.1 + frnd(0.2)
+            if Bool.random() {
+                p.hpfFreq = frnd(0.3)
+            }
+            if Bool.random() {
+                p.lpfFreq = 1.0 - frnd(0.6)
+            }
+        case .blipSelect:
+            p.reset()
+            p.waveType = WaveType(rawValue: rnd(1))!
+            if p.waveType == .square {
+                p.duty = frnd(0.6)
+            }
+            p.baseFreq = 0.2 + frnd(0.4)
+            p.envAttack = 0.0
+            p.envSustain = 0.1 + frnd(0.1)
+            p.envDecay = frnd(0.2)
+            p.hpfFreq = 0.1
+        }
+        return p
+    }
+    
+}
