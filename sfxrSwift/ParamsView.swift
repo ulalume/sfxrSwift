@@ -41,7 +41,7 @@ struct ParamsView: View {
     }
     
     @ViewBuilder
-    private func sliderRow(label: String, value: Binding<Float>, range: ClosedRange<Float> = -1...1) -> some View {
+    private func sliderRow(label: String, value: Binding<Float>, range: ClosedRange<Float> = 0...1) -> some View {
         HStack {
             MeasuringText(text: label)
                 .frame(width: labelWidth, alignment: .leading)
@@ -75,50 +75,52 @@ struct ParamsView: View {
                     
                 }
                 
-                Divider()
+                Divider().padding(.vertical)
                 
                 sliderRow(label: "Attack Time", value: $params.sfxrParameters.envAttack)
                 sliderRow(label: "Sustain Punch", value: $params.sfxrParameters.envPunch)
                 sliderRow(label: "Sustain Time", value: $params.sfxrParameters.envSustain)
                 sliderRow(label: "Decay Time", value: $params.sfxrParameters.envDecay)
              
-                Divider()
+                Divider().padding(.vertical)
                 
                 sliderRow(label: "Start Frequency", value: $params.sfxrParameters.baseFreq)
                 sliderRow(label: "Min Frequency", value: $params.sfxrParameters.freqLimit)
                 sliderRow(label: "Slide", value: $params.sfxrParameters.freqRamp, range: 0...1)
                 sliderRow(label: "Delta Slide", value: $params.sfxrParameters.freqDramp, range: 0...1)
                 
-                Divider()
+                Divider().padding(.vertical)
                 
                 sliderRow(label: "Vibrato Depth", value: $params.sfxrParameters.vibStrength)
                 sliderRow(label: "Vibrato Speed", value: $params.sfxrParameters.vibSpeed)
                 
-                Divider()
+                Divider().padding(.vertical)
                 
-                sliderRow(label: "Change Amount", value: $params.sfxrParameters.arpMod, range: 0...1)
+                sliderRow(label: "Change Amount", value: $params.sfxrParameters.arpMod, range: -1...1)
                 sliderRow(label: "Change Speed", value: $params.sfxrParameters.arpSpeed)
                 
-                Divider()
+                Divider().padding(.vertical)
+                
                 sliderRow(label: "Square Duty", value: $params.sfxrParameters.duty)
-                sliderRow(label: "Duty Sweep", value: $params.sfxrParameters.dutyRamp, range: 0...1)
+                sliderRow(label: "Duty Sweep", value: $params.sfxrParameters.dutyRamp, range: -1...1)
                 
-                Divider()
+                Divider().padding(.vertical)
                 
-                sliderRow(label: "Repeat Speed", value: $params.sfxrParameters.repeatSpeed, range: 0...1)
+                sliderRow(label: "Repeat Speed", value: $params.sfxrParameters.repeatSpeed, range: -1...1)
                 
-                Divider()
+                Divider().padding(.vertical)
                 
-                sliderRow(label: "Phaser Offset", value: $params.sfxrParameters.phaOffset, range: 0...1)
-                sliderRow(label: "Phaser Sweep", value: $params.sfxrParameters.phaRamp, range: 0...1)
+                sliderRow(label: "Phaser Offset", value: $params.sfxrParameters.phaOffset, range: -1...1)
+                sliderRow(label: "Phaser Sweep", value: $params.sfxrParameters.phaRamp, range: -1...1)
                 
-                Divider()
+                
+                Divider().padding(.vertical)
                 
                 sliderRow(label: "Lowpass Filter Cutoff", value: $params.sfxrParameters.lpfFreq)
                 sliderRow(label: "Lowpass Filter Cutoff Sweep", value: $params.sfxrParameters.lpfRamp)
                 sliderRow(label: "Lowpass Filter Resonance", value: $params.sfxrParameters.lpfResonance)
                 sliderRow(label: "Highpass Filter Cutoff", value: $params.sfxrParameters.hpfFreq)
-                sliderRow(label: "Highpass Filter Cutoff Sweep", value: $params.sfxrParameters.hpfRamp, range: 0...1)
+                sliderRow(label: "Highpass Filter Cutoff Sweep", value: $params.sfxrParameters.hpfRamp, range: -1...1)
                 
             }
             .padding()

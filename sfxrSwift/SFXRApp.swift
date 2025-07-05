@@ -66,7 +66,7 @@ struct SFXRApp: App {
                     .keyboardShortcut("S", modifiers: [.command])
                 }.disabled(selectedItem == nil)
                 Divider()
-                Menu("エキスポート") {
+                Menu("エクスポート") {
                     Button("WAV") {
                         if let selectedItem {
                             Task {
@@ -90,6 +90,9 @@ struct SFXRApp: App {
         .environment(soundPlayer)
     }
 }
+
+
+// TODO: iOSはまだ対応していません。fileExporter/ fileImporterを使う予定
 
 @MainActor
 class Exporter {

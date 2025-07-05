@@ -45,8 +45,8 @@ enum GeneratorType: Int, CaseIterable {
         case .laserShoot: return "bolt.fill"
         case .explosion: return "flame.fill"
         case .powerup: return "star.fill"
-        case .hitHurt: return "cross.fill"
-        case .jump: return "figure.jumprope"
+        case .hitHurt: return "seal.fill"
+        case .jump: return "shoe.fill"
         case .blipSelect: return "checkmark.circle.fill"
         }
     }

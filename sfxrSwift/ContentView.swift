@@ -14,6 +14,8 @@ struct ContentView: View {
     @Query private var paramsList: [Params] = []
     @Binding var selectedItem: Params?
     
+    @State private var dateFormatter = DateFormatter();
+    
     func add(sfxr: SFXRParameters) {
         let newParams = Params(timestamp: Date(), params: sfxr)
         modelContext.insert(newParams)
@@ -29,7 +31,13 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             List(paramsList, selection: $selectedItem) { params in
-                Text(params.timestamp.description).tag(params)
+                HStack {
+                    Text(params.sfxrParameters.waveType.label)
+                        .font(.headline)
+                    Spacer()
+                    Text(dateFormatter.string(from: params.timestamp))
+                        .font(.caption)
+                }.tag(params)
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -84,7 +92,6 @@ struct ContentView: View {
                                 play()
                             }) {
                                 Label("Random", systemImage: "dice.fill")
-                                    .symbolRenderingMode(.multicolor)
                             }
                             ForEach(GeneratorType.allCases, id: \.self) { generator in
                                 Button(action: {
@@ -94,7 +101,6 @@ struct ContentView: View {
                                     play()
                                 }) {
                                     Label(generator.label, systemImage: generator.systemImage)
-                                        .symbolRenderingMode(.multicolor)
                                 }
                             }
                         }
@@ -112,6 +118,10 @@ struct ContentView: View {
                 
                 selectedItem = initialParams
             }
+            
+            dateFormatter.dateStyle = .medium
+            dateFormatter.timeStyle = .short
+
         }
     }
 }
