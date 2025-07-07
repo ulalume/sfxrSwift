@@ -17,7 +17,7 @@ struct ContentView: View {
     @State private var dateFormatter = DateFormatter();
     
     func add(sfxr: SFXRParameters) {
-        let newParams = Params(timestamp: Date(), params: sfxr)
+        let newParams = Params(timestamp: Date(), sfxrParameters: sfxr)
         modelContext.insert(newParams)
         try? modelContext.save()
         
@@ -25,18 +25,21 @@ struct ContentView: View {
     }
     func play() {
         guard let selectedItem else { return }
-        let wave = selectedItem.sfxrParameters.exportWav()
+        let wave = selectedItem.wave
         soundPlayer.play(data: wave)
     }
     var body: some View {
         NavigationSplitView {
             List(paramsList, selection: $selectedItem) { params in
-                HStack {
-                    Text(params.sfxrParameters.waveType.label)
-                        .font(.headline)
-                    Spacer()
-                    Text(dateFormatter.string(from: params.timestamp))
-                        .font(.caption)
+                VStack {
+                    HStack {                        Text(params.sfxrParameters.waveType.label)
+                            .font(.headline)
+                        Spacer()
+                        Text(dateFormatter.string(from: params.timestamp))
+                            .font(.caption)
+                    }
+                    WaveformView(samples: params.waveform, color: .secondary)
+                        .frame(minHeight: 30)
                 }.tag(params)
             }
             .toolbar {
@@ -73,6 +76,7 @@ struct ContentView: View {
                         ToolbarItem(placement: .primaryAction) {
                             Button(action: {
                                 selectedItem.sfxrParameters.mutate()
+                                selectedItem.update()
                                 try? modelContext.save()
                                 
                                 play()
@@ -88,6 +92,7 @@ struct ContentView: View {
                         ToolbarItemGroup(placement: .navigation) {
                             Button(action: {
                                 self.selectedItem?.sfxrParameters = .random()
+                                self.selectedItem?.update()
                                 try? modelContext.save()
                                 play()
                             }) {
@@ -96,6 +101,7 @@ struct ContentView: View {
                             ForEach(GeneratorType.allCases, id: \.self) { generator in
                                 Button(action: {
                                     self.selectedItem?.sfxrParameters = .template(for: generator)
+                                    self.selectedItem?.update()
                                     try? modelContext.save()
                                     
                                     play()
@@ -112,7 +118,7 @@ struct ContentView: View {
         }
         .onAppear {
             if paramsList.isEmpty {
-                let initialParams = Params(timestamp: Date(), params: .random())
+                let initialParams = Params(timestamp: Date(), sfxrParameters: .random())
                 modelContext.insert(initialParams)
                 try? modelContext.save()
                 

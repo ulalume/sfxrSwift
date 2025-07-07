@@ -7,6 +7,8 @@
 
 import SwiftUI
 import SwiftData
+import UniformTypeIdentifiers
+
 
 @main
 struct SFXRApp: App {
@@ -30,7 +32,7 @@ struct SFXRApp: App {
         .commands {
             CommandGroup(before: .saveItem) { // saveItemの前、通常は新規作成は保存より前にあるのでbeforeで指定
                 Button("新規作成") {
-                    let newParams = Params(timestamp: Date(), params: .init())
+                    let newParams = Params(timestamp: Date(), sfxrParameters: .init())
                     sharedModelContainer.mainContext.insert(newParams)
                     try? sharedModelContainer.mainContext.save()
                     selectedItem = newParams
@@ -56,7 +58,7 @@ struct SFXRApp: App {
                         Task {
                             if let data = await importSfr() {
                                 let sfxr = SFXRParameters(from: data)
-                                let newParams = Params(timestamp: Date(), params: sfxr)
+                                let newParams = Params(timestamp: Date(), sfxrParameters: sfxr)
                                 sharedModelContainer.mainContext.insert(newParams)
                                 try? sharedModelContainer.mainContext.save()
                                 selectedItem = newParams
@@ -70,7 +72,7 @@ struct SFXRApp: App {
                     Button("WAV") {
                         if let selectedItem {
                             Task {
-                                await Exporter.shared.export(wav: selectedItem.sfxrParameters.exportWav())
+                                await Exporter.shared.export(wav: selectedItem.wave)
                             }
                         }
                     }
@@ -94,6 +96,12 @@ struct SFXRApp: App {
 
 // TODO: iOSはまだ対応していません。fileExporter/ fileImporterを使う予定
 
+extension UTType {
+    static var sfxr: UTType {
+        UTType(exportedAs: "me.ulalu.type.sfxr")
+    }
+}
+
 @MainActor
 class Exporter {
     static let shared = Exporter()
@@ -116,7 +124,7 @@ class Exporter {
     }
     func export(sfxr: Data) async {
         let panel = NSSavePanel()
-        panel.allowedFileTypes = ["sfxr"]
+        panel.allowedContentTypes = [.sfxr]
         panel.nameFieldStringValue = "output.sfxr"
         
         let response = await panel.begin()
@@ -136,7 +144,7 @@ class Exporter {
 @MainActor
 func importSfr() async  -> Data? {
     let panel = NSOpenPanel()
-    panel.allowedFileTypes = ["sfxr"]
+    panel.allowedContentTypes = [.sfxr]
     panel.allowsMultipleSelection = true
     
     let response = await panel.begin()

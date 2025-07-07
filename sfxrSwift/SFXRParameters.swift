@@ -60,8 +60,8 @@ fileprivate func frnd(_ range: Float) -> Float {
 }
 
 @Observable
-class SFXRParameters: CustomStringConvertible {
-    var waveType: WaveType = .square
+class SFXRParameters {
+    var waveType: WaveType = .sine
     var soundVol: Float = 0.5
     var masterVol: Float = 0.05
     var baseFreq: Float = 0.3
@@ -88,44 +88,10 @@ class SFXRParameters: CustomStringConvertible {
     var repeatSpeed: Float = 0.0
     var arpSpeed: Float = 0.0
     var arpMod: Float = 0.0
+}
 
-    func reset() {
-        baseFreq = 0.3
-        freqLimit = 0.0
-        freqRamp = 0.0
-        freqDramp = 0.0
-        duty = 0.0
-        dutyRamp = 0.0
-        vibStrength = 0.0
-        vibSpeed = 0.0
-        vibDelay = 0.0
-        envAttack = 0.0
-        envSustain = 0.3
-        envDecay = 0.4
-        envPunch = 0.0
-        filterOn = false
-        lpfResonance = 0.0
-        lpfFreq = 1.0
-        lpfRamp = 0.0
-        hpfFreq = 0.0
-        hpfRamp = 0.0
-        phaOffset = 0.0
-        phaRamp = 0.0
-        repeatSpeed = 0.0
-        arpSpeed = 0.0
-        arpMod = 0.0
-    }
-
-    var description: String {
-        "baseFreq=\(baseFreq), freqLimit=\(freqLimit), freqRamp=\(freqRamp), " +
-        "freqDramp=\(freqDramp), duty=\(duty), dutyRamp=\(dutyRamp), vibStrength=\(vibStrength), " +
-        "vibSpeed=\(vibSpeed), vibDelay=\(vibDelay), envAttack=\(envAttack), envSustain=\(envSustain), " +
-        "envDecay=\(envDecay), envPunch=\(envPunch), filterOn=\(filterOn), lpfResonance=\(lpfResonance), " +
-        "lpfFreq=\(lpfFreq), lpfRamp=\(lpfRamp), hpfFreq=\(hpfFreq), hpfRamp=\(hpfRamp), " +
-        "phaOffset=\(phaOffset), phaRamp=\(phaRamp), repeatSpeed=\(repeatSpeed), arpSpeed=\(arpSpeed), " +
-        "arpMod=\(arpMod)"
-    }
-
+// Data Export / Import
+extension SFXRParameters {
     func exportData() -> Data {
         let bdata = BinaryData()
         let version: UInt32 = 102
@@ -158,7 +124,6 @@ class SFXRParameters: CustomStringConvertible {
         bdata.append(self.arpMod)
         return bdata.data
     }
-
     convenience init(from data: Data) {
         self.init()
         let bdata = BinaryData(data: data)
@@ -228,7 +193,10 @@ class SFXRParameters: CustomStringConvertible {
             pos += MemoryLayout<Float>.size
         }
     }
-    
+}
+
+// Wav Export
+extension SFXRParameters {
     struct SynthState {
         var phase: Int = 0
         var fperiod: Double = 0.0
@@ -347,7 +315,6 @@ class SFXRParameters: CustomStringConvertible {
         if self.repeatSpeed == 0.0 {
             state.repLimit = 0
         }
-        // --- 合成ループ ---
         var fileSampleswritten = 0
         var filesample: Float = 0.0
         var fileacc: Int = 0
@@ -537,6 +504,34 @@ class SFXRParameters: CustomStringConvertible {
 
 // Random generation and mutation methods
 extension SFXRParameters {
+    func reset() {
+        waveType = .sine
+        baseFreq = 0.3
+        freqLimit = 0.0
+        freqRamp = 0.0
+        freqDramp = 0.0
+        duty = 0.0
+        dutyRamp = 0.0
+        vibStrength = 0.0
+        vibSpeed = 0.0
+        vibDelay = 0.0
+        envAttack = 0.0
+        envSustain = 0.3
+        envDecay = 0.4
+        envPunch = 0.0
+        filterOn = false
+        lpfResonance = 0.0
+        lpfFreq = 1.0
+        lpfRamp = 0.0
+        hpfFreq = 0.0
+        hpfRamp = 0.0
+        phaOffset = 0.0
+        phaRamp = 0.0
+        repeatSpeed = 0.0
+        arpSpeed = 0.0
+        arpMod = 0.0
+    }
+    
     static func random() -> SFXRParameters {
         let p = SFXRParameters()
         p.baseFreq = pow(frnd(2.0) - 1.0, 2.0)
@@ -654,7 +649,6 @@ extension SFXRParameters {
         let p = SFXRParameters()
         switch type {
         case .pickupCoin:
-            p.reset()
             p.baseFreq = 0.4 + frnd(0.5)
             p.envAttack = 0.0
             p.envSustain = frnd(0.1)
@@ -665,7 +659,6 @@ extension SFXRParameters {
                 p.arpMod = 0.2 + frnd(0.4)
             }
         case .laserShoot:
-            p.reset()
             p.waveType = WaveType(rawValue: rnd(2))!
             if p.waveType == .sine, Bool.random() {
                 p.waveType = WaveType(rawValue: rnd(1))!
@@ -702,7 +695,6 @@ extension SFXRParameters {
                 p.hpfFreq = frnd(0.3)
             }
         case .explosion:
-            p.reset()
             p.waveType = .noise
             if Bool.random() {
                 p.baseFreq = 0.1 + frnd(0.4)
@@ -735,7 +727,6 @@ extension SFXRParameters {
                 p.arpMod = 0.8 - frnd(1.6)
             }
         case .powerup:
-            p.reset()
             if Bool.random() {
                 p.waveType = .sawtooth
             } else {
@@ -757,7 +748,6 @@ extension SFXRParameters {
             p.envSustain = frnd(0.4)
             p.envDecay = 0.1 + frnd(0.4)
         case .hitHurt:
-            p.reset()
             p.waveType = WaveType(rawValue: rnd(2))!
             if p.waveType == .sine {
                 p.waveType = .noise
@@ -774,7 +764,6 @@ extension SFXRParameters {
                 p.hpfFreq = frnd(0.3)
             }
         case .jump:
-            p.reset()
             p.waveType = .square
             p.duty = frnd(0.6)
             p.baseFreq = 0.3 + frnd(0.3)
@@ -789,7 +778,6 @@ extension SFXRParameters {
                 p.lpfFreq = 1.0 - frnd(0.6)
             }
         case .blipSelect:
-            p.reset()
             p.waveType = WaveType(rawValue: rnd(1))!
             if p.waveType == .square {
                 p.duty = frnd(0.6)

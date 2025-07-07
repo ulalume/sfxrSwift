@@ -28,5 +28,27 @@
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>UTExportedTypeDeclarations</key>
+  <array>
+      <dict>
+          <key>UTTypeIdentifier</key>
+          <string>me.ulalu.type.sfxr</string>
+          <key>UTTypeDescription</key>
+          <string>SFXR Sound Effect File</string>
+          <key>UTTypeConformsTo</key>
+          <array>
+              <string>public.data</string>
+          </array>
+          <key>UTTypeTagSpecification</key>
+          <dict>
+              <key>public.filename-extension</key>
+              <array>
+                  <string>sfxr</string>
+              </array>
+              <key>public.mime-type</key>
+              <string>application/octet-stream</string>
+          </dict>
+      </dict>
+  </array>
 </dict>
 </plist>

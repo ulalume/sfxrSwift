@@ -31,13 +31,13 @@ struct MeasuringText: View {
 }
 
 struct ParamsView: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(SoundPlayer.self) private var soundPlayer
     @Binding var params: Params
     @State private var labelWidth: CGFloat = 0
     
     func play () {
-        let wave = params.sfxrParameters.exportWav()
-        soundPlayer.play(data: wave)
+        soundPlayer.play(data: params.wave)
     }
     
     @ViewBuilder
@@ -47,6 +47,8 @@ struct ParamsView: View {
                 .frame(width: labelWidth, alignment: .leading)
             Slider(value: value, in: range, onEditingChanged: { editing in
                 if !editing {
+                    params.update()
+                    try? modelContext.save()
                     play()
                 }
             })
@@ -55,11 +57,23 @@ struct ParamsView: View {
     var body: some View {
         ScrollView {
             VStack {
+                Button(action: {
+                    play()
+                }) {
+                    WaveformView(samples: params.detailedWaveform)
+                        .frame(minHeight: 100)
+                }
+                
+                sliderRow(label: "Volume", value: $params.sfxrParameters.soundVol, range: 0...1)
+                
                 HStack {
                     let binding = Binding<WaveType>(
                         get: { params.sfxrParameters.waveType },
                         set: {
-                            newValue in params.sfxrParameters.waveType = newValue
+                            newValue in
+                            params.sfxrParameters.waveType = newValue
+                            params.update()
+                            try? modelContext.save()
                             play()
                         }
                     )
@@ -72,7 +86,12 @@ struct ParamsView: View {
                             .frame(width: labelWidth, alignment: .leading)
                     })
                     .pickerStyle(.segmented)
-                    
+                }
+                
+                if params.sfxrParameters.waveType == .square {
+                    Divider().padding(.vertical)
+                    sliderRow(label: "Square Duty", value: $params.sfxrParameters.duty)
+                    sliderRow(label: "Duty Sweep", value: $params.sfxrParameters.dutyRamp, range: -1...1)
                 }
                 
                 Divider().padding(.vertical)
@@ -89,8 +108,6 @@ struct ParamsView: View {
                 sliderRow(label: "Slide", value: $params.sfxrParameters.freqRamp, range: 0...1)
                 sliderRow(label: "Delta Slide", value: $params.sfxrParameters.freqDramp, range: 0...1)
                 
-                Divider().padding(.vertical)
-                
                 sliderRow(label: "Vibrato Depth", value: $params.sfxrParameters.vibStrength)
                 sliderRow(label: "Vibrato Speed", value: $params.sfxrParameters.vibSpeed)
                 
@@ -98,11 +115,6 @@ struct ParamsView: View {
                 
                 sliderRow(label: "Change Amount", value: $params.sfxrParameters.arpMod, range: -1...1)
                 sliderRow(label: "Change Speed", value: $params.sfxrParameters.arpSpeed)
-                
-                Divider().padding(.vertical)
-                
-                sliderRow(label: "Square Duty", value: $params.sfxrParameters.duty)
-                sliderRow(label: "Duty Sweep", value: $params.sfxrParameters.dutyRamp, range: -1...1)
                 
                 Divider().padding(.vertical)
                 
@@ -133,7 +145,7 @@ struct ParamsView: View {
 
 #Preview {
     @Previewable @State var soundPlayer = SoundPlayer()
-    @Previewable @State var params = Params(timestamp: Date(), params: .random())
+    @Previewable @State var params = Params(timestamp: Date(), sfxrParameters: .random())
     ParamsView(params: $params)
         .environment(soundPlayer)
 }
