@@ -8,6 +8,7 @@
 
 import SwiftUI
 import CoreGraphics
+import SFXRSwiftLib
 
 struct LabelWidthPreferenceKey: @preconcurrency PreferenceKey {
     @MainActor static var defaultValue: CGFloat = 0
@@ -20,6 +21,7 @@ struct MeasuringText: View {
     
     var body: some View {
         Text(text)
+            .font(.caption)
             .fixedSize()
             .background(
                 GeometryReader { proxy in
@@ -67,7 +69,7 @@ struct ParamsView: View {
                 sliderRow(label: "Volume", value: $params.sfxrParameters.soundVol, range: 0...1)
                 
                 HStack {
-                    let binding = Binding<WaveType>(
+                    let binding = Binding<SFXRParameters.WaveType>(
                         get: { params.sfxrParameters.waveType },
                         set: {
                             newValue in
@@ -78,7 +80,7 @@ struct ParamsView: View {
                         }
                     )
                     Picker(selection: binding, content: {
-                        ForEach(WaveType.allCases, id: \.self) { waveType in
+                        ForEach(SFXRParameters.WaveType.allCases, id: \.self) { waveType in
                             Text(waveType.label).tag(waveType)
                         }
                     }, label: {

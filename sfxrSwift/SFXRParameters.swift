@@ -1,7 +1,6 @@
 import Foundation
-import Observation
 
-enum WaveType: Int, RawRepresentable, CaseIterable {
+enum WaveType: Int {
     case square = 0
     case sawtooth = 1
     case sine = 2
@@ -16,10 +15,9 @@ enum WaveType: Int, RawRepresentable, CaseIterable {
         }
     }
 }
+extension WaveType: RawRepresentable, CaseIterable {}
 
-let maxWaveTypeRawValue = WaveType.noise.rawValue
-
-enum GeneratorType: Int, CaseIterable {
+enum GeneratorType: Int {
     case pickupCoin = 0
     case laserShoot = 1
     case explosion = 2
@@ -51,6 +49,7 @@ enum GeneratorType: Int, CaseIterable {
         }
     }
 }
+extension GeneratorType: CaseIterable {}
 
 fileprivate func rnd(_ range: Int) -> Int {
     Int.random(in: 0...range)
@@ -59,8 +58,7 @@ fileprivate func frnd(_ range: Float) -> Float {
     Float.random(in: 0...range)
 }
 
-@Observable
-class SFXRParameters {
+struct SFXRParameters {
     var waveType: WaveType = .sine
     var soundVol: Float = 0.5
     var masterVol: Float = 0.05
@@ -124,7 +122,7 @@ extension SFXRParameters {
         bdata.append(self.arpMod)
         return bdata.data
     }
-    convenience init(from data: Data) {
+    init(from data: Data) {
         self.init()
         let bdata = BinaryData(data: data)
         var pos = 0
@@ -504,7 +502,7 @@ extension SFXRParameters {
 
 // Random generation and mutation methods
 extension SFXRParameters {
-    func reset() {
+    mutating func reset() {
         waveType = .sine
         baseFreq = 0.3
         freqLimit = 0.0
@@ -533,7 +531,7 @@ extension SFXRParameters {
     }
     
     static func random() -> SFXRParameters {
-        let p = SFXRParameters()
+        var p = SFXRParameters()
         p.baseFreq = pow(frnd(2.0) - 1.0, 2.0)
         if Bool.random() {
             p.baseFreq = pow(frnd(2.0) - 1.0, 3.0) + 0.5
@@ -576,7 +574,7 @@ extension SFXRParameters {
         return p
     }
     
-    func mutate() {
+    mutating func mutate() {
         if Bool.random() {
             baseFreq += frnd(0.1) - 0.05
         }
@@ -646,7 +644,7 @@ extension SFXRParameters {
     }
     
     static func template(for type: GeneratorType) -> SFXRParameters {
-        let p = SFXRParameters()
+        var p = SFXRParameters()
         switch type {
         case .pickupCoin:
             p.baseFreq = 0.4 + frnd(0.5)

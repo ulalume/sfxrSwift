@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import SFXRSwiftLib
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
@@ -33,7 +34,6 @@ struct ContentView: View {
             List(paramsList, selection: $selectedItem) { params in
                 VStack {
                     HStack {                        Text(params.sfxrParameters.waveType.label)
-                            .font(.headline)
                         Spacer()
                         Text(dateFormatter.string(from: params.timestamp))
                             .font(.caption)
@@ -50,16 +50,16 @@ struct ContentView: View {
                         Label("Add", systemImage: "plus")
                     }
                 }
-                if let selectedItem {
-                    ToolbarItem(placement:.destructiveAction) {
-                        Button(action: {
-                            modelContext.delete(selectedItem)
-                            try? modelContext.save()
-                            self.selectedItem = nil
-                        }) {
-                            Label("Delete", systemImage: "trash")
-                        }
+                ToolbarItem(placement:.destructiveAction) {
+                    Button(action: {
+                        guard let selectedItem else { return }
+                        modelContext.delete(selectedItem)
+                        try? modelContext.save()
+                        self.selectedItem = nil
+                    }) {
+                        Label("Delete", systemImage: "trash")
                     }
+                    .disabled(selectedItem == nil)
                 }
             }
         } detail: {
@@ -98,7 +98,7 @@ struct ContentView: View {
                             }) {
                                 Label("Random", systemImage: "dice.fill")
                             }
-                            ForEach(GeneratorType.allCases, id: \.self) { generator in
+                            ForEach(SFXRParameters.GeneratorType.allCases, id: \.self) { generator in
                                 Button(action: {
                                     self.selectedItem?.sfxrParameters = .template(for: generator)
                                     self.selectedItem?.update()

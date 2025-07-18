@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftData
-
+import SFXRSwiftLib
 
 @Observable
 final class ParamsData {
